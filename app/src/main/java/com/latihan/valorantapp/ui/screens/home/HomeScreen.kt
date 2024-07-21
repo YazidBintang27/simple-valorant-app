@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -29,13 +30,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.latihan.valorantapp.R
 import com.latihan.valorantapp.ui.components.AgentCard
 import com.latihan.valorantapp.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -61,12 +66,18 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             )
         }
     ) { innerPadding ->
-        HomeContent(modifier = modifier.padding(innerPadding))
+        HomeContent(
+            modifier = modifier.padding(innerPadding),
+            navHostController = navHostController
+        )
     }
 }
 
 @Composable
-fun HomeContent(modifier: Modifier = Modifier) {
+fun HomeContent(
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController
+) {
 
     val homeViewModel: HomeViewModel = hiltViewModel()
     val agentData by homeViewModel.agentData.collectAsState()
@@ -92,12 +103,17 @@ fun HomeContent(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(horizontal = 20.dp)
         )
         Spacer(modifier = Modifier.height(20.dp))
-        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-            items(agentData.size) { index->
-                AgentCard(
-                    agentData = agentData,
-                    index = index
-                )
+        if (agentData.isEmpty()) {
+            CircularProgressIndicator()
+        } else {
+            LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+                items(agentData.size) { index->
+                    AgentCard(
+                        agentData = agentData,
+                        index = index,
+                        navHostController = navHostController
+                    )
+                }
             }
         }
     }

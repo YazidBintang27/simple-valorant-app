@@ -38,8 +38,7 @@ fun BottomBar(
     )
     AnimatedVisibility(visible = currentRoute.shouldShowBottomBar()) {
         NavigationBar(
-            modifier = Modifier
-                .background(color = Color.Red)
+            contentColor = Color.Transparent,
         ) {
             screens.forEach { screen ->
                 AddItem(

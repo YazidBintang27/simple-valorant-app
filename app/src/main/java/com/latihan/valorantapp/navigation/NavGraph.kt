@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.internal.composableLambdaN
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.latihan.valorantapp.ui.screens.detail.DetailScreen
 import com.latihan.valorantapp.ui.screens.home.HomeScreen
 import com.latihan.valorantapp.ui.screens.profile.ProfileScreen
@@ -22,7 +24,7 @@ fun NavGraph(
         startDestination = Screens.Splash.route
     ) {
         composable(Screens.Home.route) {
-            HomeScreen()
+            HomeScreen(navHostController = navHostController)
         }
         composable(Screens.Search.route) {
             SearchScreen()
@@ -30,8 +32,11 @@ fun NavGraph(
         composable(Screens.Person.route) {
             ProfileScreen()
         }
-        composable(Screens.Detail.route) {
-            DetailScreen()
+        composable(
+            route = "${Screens.Detail.route}/{index}",
+            arguments = listOf(navArgument("index") {type = NavType.IntType})
+        ) { backStackEntry ->
+            DetailScreen(modifier = Modifier, backStackEntry.arguments?.getInt("index") ?: -1)
         }
         composable(Screens.Splash.route) {
             SplashScreen(navHostController = navHostController)

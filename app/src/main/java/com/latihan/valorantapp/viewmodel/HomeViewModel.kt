@@ -24,14 +24,13 @@ class HomeViewModel @Inject constructor(
 
     init {
         getAllAgents()
-        Log.d("ViewModel", "${agentData.value.size}")
+        Log.d("ViewModel", "ViewModel Initialized ")
     }
 
     private fun getAllAgents() {
         viewModelScope.launch {
             withContext(Dispatchers.Default) {
                 val data = repository.requestAllAgents()
-                Log.d("ViewModel", "Data log")
                 _agentData.value = data
             }
         }
