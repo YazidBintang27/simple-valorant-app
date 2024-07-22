@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.latihan.valorantapp.viewmodel.HomeViewModel
+import com.latihan.valorantapp.viewmodel.DetailViewModel
 
 @Composable
 fun DetailScreen(
@@ -23,10 +23,14 @@ fun DetailScreen(
 @Composable
 fun DetailContent(index: Int?) {
 
-    val homeViewModel: HomeViewModel = hiltViewModel()
-    val agentData by homeViewModel.agentData.collectAsState()
+    val detailViewModel: DetailViewModel = hiltViewModel()
+    val agentByIndex by detailViewModel.agentByIndex.collectAsState()
+
+    LaunchedEffect(agentByIndex) {
+        detailViewModel.getAgentByIndex(index!!)
+    }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = agentData[index!!]?.displayName ?: "")
+        Text(text = agentByIndex?.displayName ?: "")
     }
 }
